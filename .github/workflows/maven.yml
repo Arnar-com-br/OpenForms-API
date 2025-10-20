@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        distribution: [ 'temurin', 'correto', 'graalvm' ]
+        distribution: [ 'temurin', 'corretto', 'graalvm' ]
 
     steps:
     - uses: actions/checkout@v4
