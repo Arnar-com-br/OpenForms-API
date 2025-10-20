@@ -1,0 +1,11 @@
+/target/
+.factorypath
+
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+/src/main/resources/springboot.jks
+/src/main/resources/application.properties
+/src/main/resources/static/img/
