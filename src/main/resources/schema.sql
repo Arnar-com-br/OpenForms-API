@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS member CASCADE;
-DROP TABLE IF EXISTS email CASCADE;
 
 CREATE TABLE member (
     id bigint GENERATED ALWAYS AS IDENTITY,
@@ -9,8 +8,3 @@ CREATE TABLE member (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE email (
-    id bigint GENERATED ALWAYS AS IDENTITY,
-    email varchar(255) UNIQUE,
-    PRIMARY KEY (id)
-);
