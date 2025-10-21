@@ -21,8 +21,7 @@ import br.com.arnar.openforms.api.exception.RequestValidationException;
 import br.com.arnar.openforms.api.request.user.UserEmailUpdateRequest;
 import org.junit.jupiter.api.Test;
 
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.emptyOrNull;
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.exceedsMaxSize;
+import static br.com.arnar.openforms.api.request.ExceptionTemplate.*;
 
 public class UserEmailUpdateRequestTest extends RequestTest {
     @Test
@@ -80,6 +79,17 @@ public class UserEmailUpdateRequestTest extends RequestTest {
     }
 
     @Test
+    void oldEmailInvalid() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur@aaaaaaaaaa");
+        request.setNewEmail("arthur.araujo@hotmail.com");
+        request.setPassword("password");
+
+        assertValidationThrows(request, invalid("oldEmail"));
+    }
+
+    @Test
     void newEmailEmpty() {
         UserEmailUpdateRequest request = new UserEmailUpdateRequest();
 
@@ -110,6 +120,18 @@ public class UserEmailUpdateRequestTest extends RequestTest {
 
         assertValidationThrows(request, exceedsMaxSize("newEmail", 128));
     }
+
+    @Test
+    void newEmailInvalid() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur@hotmail.com");
+        request.setNewEmail("arthur.araujo@aaaaaaaaaaaaaaaaaaaa");
+        request.setPassword("password");
+
+        assertValidationThrows(request, invalid("newEmail"));
+    }
+
 
     @Test
     void passwordEmpty() {
