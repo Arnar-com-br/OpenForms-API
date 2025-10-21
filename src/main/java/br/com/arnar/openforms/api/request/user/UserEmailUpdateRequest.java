@@ -24,8 +24,7 @@ import br.com.arnar.openforms.api.request.RequestValidation;
 import lombok.Getter;
 import lombok.Setter;
 
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.emptyOrNull;
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.invalid;
+import static br.com.arnar.openforms.api.request.ExceptionTemplate.*;
 import static java.util.Objects.isNull;
 
 @Getter
@@ -44,6 +43,10 @@ public class UserEmailUpdateRequest implements Request {
             throw invalid("oldEmail");
         }
 
+        if (oldEmail.length() > 128) {
+            throw exceedsMaxSize("oldEmail", 128);
+        }
+
         if (isNull(newEmail) || newEmail.isEmpty()) {
             throw emptyOrNull("newEmail");
         }
@@ -52,12 +55,20 @@ public class UserEmailUpdateRequest implements Request {
             throw invalid("newEmail");
         }
 
+        if (newEmail.length() > 128) {
+            throw exceedsMaxSize("newEmail", 128);
+        }
+
         if (oldEmail.equals(newEmail)) {
             throw new RequestValidationException("Emails cannot be equal");
         }
 
         if (isNull(password) || password.isEmpty()) {
             throw emptyOrNull("password");
+        }
+
+        if (password.length() > 64) {
+            throw exceedsMaxSize("password", 64);
         }
     }
 }

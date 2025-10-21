@@ -27,13 +27,57 @@ import static br.com.arnar.openforms.api.request.ExceptionTemplate.*;
 class UserCreateRequestTest extends RequestTest {
 	@Test
 	void noException() {
-		UserLoginRequest request = new UserLoginRequest();
+        UserCreateRequest request = new UserCreateRequest();
 
 		request.setEmail("arthur@gmail.com");
+        request.setUsername("Arthur");
 		request.setPassword("senha23213");
 
 		assertValidationDoesNotThrow(request);
 	}
+
+    @Test
+    void usernameInvalid() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("*!@&#(&!@#*(&!@#!@");
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
+
+        assertValidationThrows(request, specialChars("username"));
+    }
+
+    @Test
+    void usernameEmpty() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("");
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
+
+        assertValidationThrows(request, emptyOrNull("username"));
+    }
+
+    @Test
+    void usernameNull() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
+
+        assertValidationThrows(request, emptyOrNull("username"));
+    }
+
+    @Test
+    void usernameExceedsSize() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("arthur".repeat(120));
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
+
+        assertValidationThrows(request, exceedsMaxSize("username", 128));
+    }
 
 	@Test
 	void emailInvalid() {
@@ -67,6 +111,17 @@ class UserCreateRequestTest extends RequestTest {
 		assertValidationThrows(request, emptyOrNull("email"));
 	}
 
+    @Test
+    void emailExceedsSize() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setEmail("arthur.araujo".repeat(128) + "@gmail.com");
+
+        assertValidationThrows(request, exceedsMaxSize("email", 128));
+    }
+
 	@Test
 	void passwordEmpty() {
 		UserCreateRequest request = new UserCreateRequest();
@@ -87,5 +142,16 @@ class UserCreateRequestTest extends RequestTest {
 
 		assertValidationThrows(request, emptyOrNull("password"));
 	}
+
+    @Test
+    void passwordExceedsSize() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("Arthur");
+        request.setPassword("senha23213".repeat(128));
+        request.setEmail("arthur@gmail.com");
+
+        assertValidationThrows(request, exceedsMaxSize("password", 64));
+    }
 
 }

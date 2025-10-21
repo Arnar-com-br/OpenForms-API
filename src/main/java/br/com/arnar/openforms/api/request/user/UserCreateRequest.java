@@ -53,6 +53,9 @@ public class UserCreateRequest implements Request {
         if (RequestValidation.hasSpecialCharacters(username)) {
             throw specialChars("username");
         }
+        if (username.length() > 128) {
+            throw exceedsMaxSize("username", 128);
+        }
 
         if (isNull(email) || email.isEmpty()) {
             throw emptyOrNull("email");
@@ -60,10 +63,15 @@ public class UserCreateRequest implements Request {
         if (RequestValidation.invalidEmail(email)) {
             throw invalid("email");
         }
+        if (email.length() > 128) {
+            throw exceedsMaxSize("email", 128);
+        }
 
         if (isNull(password) || password.isEmpty()) {
             throw emptyOrNull("password");
         }
-
+        if (password.length() > 64) {
+            throw exceedsMaxSize("password", 64);
+        }
     }
 }

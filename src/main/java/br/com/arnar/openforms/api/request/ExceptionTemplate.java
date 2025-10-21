@@ -20,6 +20,10 @@ package br.com.arnar.openforms.api.request;
 import br.com.arnar.openforms.api.exception.RequestValidationException;
 
 public class ExceptionTemplate {
+    public static RequestValidationException exceedsMaxSize(String field, Integer maxSize) {
+        return new RequestValidationException(field + " exceeds the maximum size of " + maxSize.toString());
+    }
+
     public static RequestValidationException emptyOrNull(String field) {
         return new RequestValidationException(field + " cannot be empty or null");
     }

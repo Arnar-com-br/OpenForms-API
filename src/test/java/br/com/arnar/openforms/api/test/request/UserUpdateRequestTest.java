@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 
 import br.com.arnar.openforms.api.request.user.UserUpdateRequest;
 
+import static br.com.arnar.openforms.api.request.ExceptionTemplate.exceedsMaxSize;
+
 public class UserUpdateRequestTest extends RequestTest {
     @Test
     void updateUsername() {
@@ -43,5 +45,14 @@ public class UserUpdateRequestTest extends RequestTest {
     @Test
     void fieldsNull() {
         assertValidationThrows(new UserUpdateRequest(), "Specify at least 1 field");
+    }
+
+    @Test
+    void usernameExceedsSize() {
+        UserUpdateRequest request = new UserUpdateRequest();
+
+        request.setUsername("aodko12koke12".repeat(128));
+
+        assertValidationThrows(request, exceedsMaxSize("username", 128));
     }
 }

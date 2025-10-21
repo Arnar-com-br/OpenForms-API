@@ -24,8 +24,7 @@ import br.com.arnar.openforms.api.request.RequestValidation;
 import lombok.Getter;
 import lombok.Setter;
 
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.emptyOrNull;
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.invalid;
+import static br.com.arnar.openforms.api.request.ExceptionTemplate.*;
 import static java.util.Objects.isNull;
 
 @Getter
@@ -52,9 +51,15 @@ public class UserLoginRequest implements Request {
         if (RequestValidation.invalidEmail(email)) {
             throw invalid("email");
         }
+        if (email.length() > 128) {
+            throw exceedsMaxSize("email", 128);
+        }
 
         if (isNull(password) || password.isEmpty()) {
             throw emptyOrNull("password");
+        }
+        if (password.length() > 128) {
+            throw exceedsMaxSize("password", 64);
         }
     }
 }

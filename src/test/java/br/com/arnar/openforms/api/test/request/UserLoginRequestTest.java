@@ -64,6 +64,16 @@ public class UserLoginRequestTest extends RequestTest {
     }
 
     @Test
+    void emailExceedsSize() {
+        UserLoginRequest request = new UserLoginRequest();
+
+        request.setEmail("arthur".repeat(128) + "@gmail.com");
+        request.setPassword("senha23213");
+
+        assertValidationThrows(request, exceedsMaxSize("email", 128));
+    }
+
+    @Test
     void passwordEmpty() {
         UserLoginRequest request = new UserLoginRequest();
 
@@ -80,5 +90,15 @@ public class UserLoginRequestTest extends RequestTest {
         request.setEmail("arthur@gmail.com");
 
         assertValidationThrows(request, emptyOrNull("password"));
+    }
+
+    @Test
+    void passwordExceedsSize() {
+        UserLoginRequest request = new UserLoginRequest();
+
+        request.setEmail("arthur@gmail.com");
+        request.setPassword("senha23213".repeat(128));
+
+        assertValidationThrows(request, exceedsMaxSize("password", 64));
     }
 }
