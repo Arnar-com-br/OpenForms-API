@@ -21,7 +21,7 @@ import br.com.arnar.openforms.api.exception.RequestValidationException;
 import br.com.arnar.openforms.api.request.user.UserEmailUpdateRequest;
 import org.junit.jupiter.api.Test;
 
-import static br.com.arnar.openforms.api.request.ExceptionTemplate.emptyOrNull;
+import static br.com.arnar.openforms.api.request.ExceptionTemplate.*;
 
 public class UserEmailUpdateRequestTest extends RequestTest {
     @Test
@@ -68,6 +68,28 @@ public class UserEmailUpdateRequestTest extends RequestTest {
     }
 
     @Test
+    void oldEmailExceedsSize() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur".repeat(128) + "@hotmail.com");
+        request.setNewEmail("arthur.araujo@hotmail.com");
+        request.setPassword("password");
+
+        assertValidationThrows(request, exceedsMaxSize("oldEmail", 128));
+    }
+
+    @Test
+    void oldEmailInvalid() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur@aaaaaaaaaa");
+        request.setNewEmail("arthur.araujo@hotmail.com");
+        request.setPassword("password");
+
+        assertValidationThrows(request, invalid("oldEmail"));
+    }
+
+    @Test
     void newEmailEmpty() {
         UserEmailUpdateRequest request = new UserEmailUpdateRequest();
 
@@ -89,6 +111,29 @@ public class UserEmailUpdateRequestTest extends RequestTest {
     }
 
     @Test
+    void newEmailExceedsSize() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur@hotmail.com");
+        request.setNewEmail("arthur.araujo".repeat(128) + "@hotmail.com");
+        request.setPassword("password");
+
+        assertValidationThrows(request, exceedsMaxSize("newEmail", 128));
+    }
+
+    @Test
+    void newEmailInvalid() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur@hotmail.com");
+        request.setNewEmail("arthur.araujo@aaaaaaaaaaaaaaaaaaaa");
+        request.setPassword("password");
+
+        assertValidationThrows(request, invalid("newEmail"));
+    }
+
+
+    @Test
     void passwordEmpty() {
         UserEmailUpdateRequest request = new UserEmailUpdateRequest();
 
@@ -107,6 +152,17 @@ public class UserEmailUpdateRequestTest extends RequestTest {
         request.setNewEmail("arthur.araujo@hotmail.com");
 
         assertValidationThrows(request, emptyOrNull("password"));
+    }
+
+    @Test
+    void passwordExceedsSize() {
+        UserEmailUpdateRequest request = new UserEmailUpdateRequest();
+
+        request.setOldEmail("arthur@hotmail.com");
+        request.setNewEmail("arthur.araujo@hotmail.com");
+        request.setPassword("password".repeat(128) );
+
+        assertValidationThrows(request, exceedsMaxSize("password", 64));
     }
 
 

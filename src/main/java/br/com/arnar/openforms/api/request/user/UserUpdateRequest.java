@@ -23,6 +23,7 @@ import br.com.arnar.openforms.api.request.Request;
 import lombok.Getter;
 import lombok.Setter;
 
+import static br.com.arnar.openforms.api.request.ExceptionTemplate.exceedsMaxSize;
 import static java.util.Objects.isNull;
 
 @Getter
@@ -42,8 +43,12 @@ public class UserUpdateRequest implements Request {
 
     public void validate() throws RequestValidationException {
         if (!isNull(username)) {
-            if (!username.isEmpty())
+            if (!username.isEmpty()) {
+                if (username.length() > 128) {
+                    throw exceedsMaxSize("username", 128);
+                }
                 return;
+            }
         }
 
         throw new RequestValidationException("Specify at least 1 field");
