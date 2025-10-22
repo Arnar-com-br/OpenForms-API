@@ -59,7 +59,7 @@ public class UserLoginRequest implements Request {
             throw emptyOrNull("password");
         }
         if (password.length() > 128) {
-            throw exceedsMaxSize("password", 64);
+            throw exceedsMaxSize("password", 128);
         }
     }
 }

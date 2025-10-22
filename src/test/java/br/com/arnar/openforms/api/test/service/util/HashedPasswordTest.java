@@ -35,7 +35,7 @@ public class HashedPasswordTest {
 
                 HashedPassword password = new HashedPassword(mockUser);
 
-                assertEquals("ff13706a956c3ac97560f7ba6e1f0a0d", password.getValue());
+                assertEquals("ff13706a956c3ac97560f7ba6e1f0a0de45febab009dc942189159f1bbfd3a0e07a60f23813504515a598887a3a90cf7993c1cf42663db05255aa39fe9bf47bd", password.getValue());
         }
 
         @Test

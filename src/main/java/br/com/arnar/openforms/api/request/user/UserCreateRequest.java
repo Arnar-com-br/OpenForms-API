@@ -70,8 +70,8 @@ public class UserCreateRequest implements Request {
         if (isNull(password) || password.isEmpty()) {
             throw emptyOrNull("password");
         }
-        if (password.length() > 64) {
-            throw exceedsMaxSize("password", 64);
+        if (password.length() > 128) {
+            throw exceedsMaxSize("password", 128);
         }
     }
 }
