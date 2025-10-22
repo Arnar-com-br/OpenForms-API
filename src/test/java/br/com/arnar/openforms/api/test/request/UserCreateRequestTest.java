@@ -148,10 +148,10 @@ class UserCreateRequestTest extends RequestTest {
         UserCreateRequest request = new UserCreateRequest();
 
         request.setUsername("Arthur");
-        request.setPassword("senha23213".repeat(128));
+        request.setPassword("senha23213".repeat(129));
         request.setEmail("arthur@gmail.com");
 
-        assertValidationThrows(request, exceedsMaxSize("password", 64));
+        assertValidationThrows(request, exceedsMaxSize("password", 128));
     }
 
 }

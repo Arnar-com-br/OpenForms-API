@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -48,25 +47,19 @@ class UserControllerTest extends ControllerTest {
 
 	@Test
 	@Order(3)
-	void getById() throws Exception {
-		req.get("/user/1").andExpect(status().isOk());
-	}
-
-	@Test
-	@Order(4)
 	void getMe() throws Exception {
 		String jwt = MockValues.getUserJwt(mockMvc);
 		req.get("/user/me", jwt).andExpect(status().isOk());
 	}
 
-	@Test
-	@Order(5)
-	void getByInexistentId() throws Exception {
-		req.get("/user/64").andExpect(status().isNotFound());
-	}
+    @Test
+    @Order(4)
+    void getMeUnauthenticated() throws Exception {
+        req.get("/user/me").andExpect(status().isForbidden());
+    }
 
 	@Test
-	@Order(6)
+	@Order(5)
 	void login() throws Exception {
 		MockUser user = new MockUser("arthur.araujo@gmail.com", "S_enha64");
 
@@ -74,7 +67,7 @@ class UserControllerTest extends ControllerTest {
 	}
 
 	@Test
-	@Order(7)
+	@Order(6)
 	void loginIncorrectCredentials() throws Exception {
 		MockUser user = new MockUser("arthur.araujo@gmail.com", "senha");
 
@@ -82,11 +75,17 @@ class UserControllerTest extends ControllerTest {
 	}
 
 	@Test
-	@Order(8)
+	@Order(7)
 	void updateMeUsername() throws Exception {
 		String jwt = MockValues.getUserJwt(mockMvc);
 		req.put("/user/me", "{\"username\": \"uuu\"}", jwt).andExpect(status().isOk());
 	}
+
+    @Test
+    @Order(8)
+    void updateMeUsernameUnauthenticated() throws Exception {
+        req.put("/user/me", "{\"username\": \"uuu\"}").andExpect(status().isForbidden());
+    }
 
 	@Test
 	@Order(9)
@@ -94,4 +93,10 @@ class UserControllerTest extends ControllerTest {
 		String jwt = MockValues.getDisposableJwt(mockMvc);
 		req.delete("/user/me", jwt).andExpect(status().isOk());
 	}
+
+    @Test
+    @Order(10)
+    void deleteMeUnauthenticated() throws Exception {
+        req.delete("/user/me").andExpect(status().isForbidden());
+    }
 }

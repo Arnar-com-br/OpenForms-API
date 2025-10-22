@@ -160,9 +160,9 @@ public class UserEmailUpdateRequestTest extends RequestTest {
 
         request.setOldEmail("arthur@hotmail.com");
         request.setNewEmail("arthur.araujo@hotmail.com");
-        request.setPassword("password".repeat(128) );
+        request.setPassword("password".repeat(129) );
 
-        assertValidationThrows(request, exceedsMaxSize("password", 64));
+        assertValidationThrows(request, exceedsMaxSize("password", 128));
     }
 
 

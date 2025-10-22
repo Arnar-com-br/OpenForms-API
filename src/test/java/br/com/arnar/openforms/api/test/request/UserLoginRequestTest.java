@@ -97,8 +97,8 @@ public class UserLoginRequestTest extends RequestTest {
         UserLoginRequest request = new UserLoginRequest();
 
         request.setEmail("arthur@gmail.com");
-        request.setPassword("senha23213".repeat(128));
+        request.setPassword("senha23213".repeat(129));
 
-        assertValidationThrows(request, exceedsMaxSize("password", 64));
+        assertValidationThrows(request, exceedsMaxSize("password", 128));
     }
 }

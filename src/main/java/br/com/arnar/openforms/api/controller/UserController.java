@@ -56,11 +56,6 @@ public class UserController extends ServiceController<UserServiceInterface> {
         return ok(new NoCredentialsResponse(service.getMe(request)));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
-        return ok(service.getByIdWithoutCredentials(id));
-    }
-
     @PutMapping("/me")
     public ResponseEntity<?> update(@RequestBody UserUpdateRequest request, HttpServletRequest req) {
         User user = service.getMe(req);

@@ -66,7 +66,7 @@ public class HashedPassword {
 
         byte[] salt = (email + password).getBytes();
 
-        return new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        return new PBEKeySpec(password.toCharArray(), salt, 65536, 512);
     }
 
     private String generateHash(String algorithm, KeySpec hashSpecifications) {
