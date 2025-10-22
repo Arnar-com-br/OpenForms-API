@@ -41,9 +41,13 @@ public class SecurityConfiguration {
         http.sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests(requests -> requests.requestMatchers("**").permitAll());
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/api/v1/form/me/**").authenticated()
+                .requestMatchers("/api/v1/user/me").authenticated()
+                .requestMatchers("/api/v1/user/me/**").authenticated()
+                .requestMatchers("**").permitAll());
 
-        http.exceptionHandling(handling -> handling.accessDeniedPage("/login"));
+        http.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
 
         http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 
