@@ -63,4 +63,9 @@ public class FormControllerTest extends ControllerTest {
         req.get("/form/me/listAll", jwt).andExpect(status().isNotFound());
     }
 
+    @Test
+    void getAllForMeNotAuthenticated() throws Exception {
+        req.get("/form/me/listAll").andExpect(status().isForbidden());
+    }
+
 }

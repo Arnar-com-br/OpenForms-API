@@ -64,21 +64,6 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User getById(Long id) {
-        Optional<User> user = repository.findById(id);
-
-        if (user.isEmpty()) {
-            throw new NoSuchEntryException("Unable to find a user with this id");
-        }
-
-        return user.get();
-    }
-
-    public NoCredentialsResponse getByIdWithoutCredentials(Long id) {
-        return new NoCredentialsResponse(this.getById(id));
-    }
-
-    @Override
     public User getByEmail(String email) {
         Optional<User> user = repository.findByEmail(email);
 

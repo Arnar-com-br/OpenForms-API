@@ -47,15 +47,6 @@ public interface UserServiceInterface {
     User getMe(HttpServletRequest request) throws NoSuchEntryException;
 
     /**
-     * Retrieves a user by ID without returning credential-related fields.
-     *
-     * @param id the ID of the user to retrieve.
-     * @return a {@link NoCredentialsResponse} representing the user.
-     * @throws NoSuchEntryException if the user is not found.
-     */
-    NoCredentialsResponse getByIdWithoutCredentials(Long id) throws NoSuchEntryException;
-
-    /**
      * Retrieves a user entity by their email address.
      *
      * @param email the email of the user.
@@ -99,8 +90,6 @@ public interface UserServiceInterface {
      * @throws NoSuchEntryException if the user does not exist.
      */
     void delete(User entity) throws NoSuchEntryException;
-
-    User getById(Long id) throws NoSuchEntryException;
 
     User insert(User entity);
 }
