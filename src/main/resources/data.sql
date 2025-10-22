@@ -15,3 +15,6 @@ INSERT INTO member (username, email, password) VALUES
 
 INSERT INTO member (username, email, password) VALUES
     ('mock.admin', 'mock.admin@gmail.com', '061cf224cffe1951e32ffaa1c414544a');
+
+INSERT INTO form (owner_id, name, phone_number, email, message) VALUES
+    (3, 'Mock User Client', '5521921232132', 'mock.disposable@gmail.com', 'hello there');
