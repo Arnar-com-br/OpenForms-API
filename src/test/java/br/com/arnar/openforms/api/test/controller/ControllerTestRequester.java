@@ -86,6 +86,16 @@ public class ControllerTestRequester {
         }
 
         /**
+         * Performs a DELETE request in an API endpoint.
+         * @param url The endpoint
+         * @return The result of the request
+         * @throws Exception If the request fails
+         */
+        public ResultActions delete(String url) throws Exception {
+            return mockMvc.perform(MockMvcRequestBuilders.delete(API_PATH + url));
+        }
+
+        /**
          * Performs a POST request in an API endpoint.
          * @param url The endpoint
          * @param content The content of the request
