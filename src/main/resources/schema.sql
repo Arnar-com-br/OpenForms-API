@@ -15,6 +15,7 @@ CREATE TABLE form (
     phone_number varchar(128),
     email varchar(128),
     message varchar(1280),
+    visualized boolean DEFAULT false,
     PRIMARY KEY (id),
     CONSTRAINT fk_owner_id FOREIGN KEY(owner_id) REFERENCES member(id)
 );

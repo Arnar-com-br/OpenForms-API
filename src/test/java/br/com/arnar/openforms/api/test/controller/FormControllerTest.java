@@ -68,4 +68,21 @@ public class FormControllerTest extends ControllerTest {
         req.get("/form/me/listAll").andExpect(status().isForbidden());
     }
 
+    @Test
+    void getByIdForMe() throws Exception {
+        String jwt = MockValues.getUserJwt(mockMvc);
+        req.get("/form/me/1", jwt).andExpect(status().isOk());
+    }
+
+    @Test
+    void getByIdExistentButNotMine() throws Exception {
+        String jwt = MockValues.getUserJwt(mockMvc);
+        req.get("/form/me/2", jwt).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getByIdInexistent() throws Exception {
+        String jwt = MockValues.getUserJwt(mockMvc);
+        req.get("/form/me/23", jwt).andExpect(status().isNotFound());
+    }
 }

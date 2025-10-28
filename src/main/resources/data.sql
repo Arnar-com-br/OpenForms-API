@@ -18,3 +18,6 @@ INSERT INTO member (username, email, password) VALUES
 
 INSERT INTO form (owner_id, name, phone_number, email, message) VALUES
     (3, 'Mock User Client', '5521921232132', 'mock.disposable@gmail.com', 'hello there');
+
+INSERT INTO form (owner_id, name, phone_number, email, message) VALUES
+    (2, 'Conta 2 Client', '5521921232132', 'mock.disposable@gmail.com', 'hello there');
