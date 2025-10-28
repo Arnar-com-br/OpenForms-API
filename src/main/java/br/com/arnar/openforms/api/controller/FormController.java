@@ -76,4 +76,21 @@ public class FormController extends ServiceController<FormServiceInterface> {
 
         return ok(new SimplifiedForm(forms));
     }
+
+    @Transactional
+    @PatchMapping(path = "/me/{id}/view")
+    public ResponseEntity<?> setFormVisualized(@PathVariable Long id, HttpServletRequest request) {
+        User me = userService.getMe(request);
+
+        Form form = service.getById(id);
+
+        if (!form.getOwner().getId().equals(me.getId())) {
+            throw new NoSuchEntryException("Unable to find a form with this id");
+        }
+
+        form.setVisualized(true);
+        service.insert(form);
+
+        return ok(new SimplifiedForm(form));
+    }
 }

@@ -85,4 +85,22 @@ public class FormControllerTest extends ControllerTest {
         String jwt = MockValues.getUserJwt(mockMvc);
         req.get("/form/me/23", jwt).andExpect(status().isNotFound());
     }
+
+    @Test
+    void visualize() throws Exception {
+        String jwt = MockValues.getUserJwt(mockMvc);
+        req.patch("/form/me/1/view", jwt).andExpect(status().isOk());
+    }
+
+    @Test
+    void visualizeExistentBotNotMine() throws Exception {
+        String jwt = MockValues.getUserJwt(mockMvc);
+        req.patch("/form/me/2/view", jwt).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void visualizeInexistent() throws Exception {
+        String jwt = MockValues.getUserJwt(mockMvc);
+        req.patch("/form/me/2231/view", jwt).andExpect(status().isNotFound());
+    }
 }

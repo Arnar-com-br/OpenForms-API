@@ -26,4 +26,5 @@ public interface FormServiceInterface {
     List<Form> getByOwner(User owner);
     Form getById(Long id);
     Form insert(Form entity, Long ownerId);
+    Form insert(Form entity);
 }

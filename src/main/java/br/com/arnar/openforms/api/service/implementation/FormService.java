@@ -74,4 +74,9 @@ public class FormService implements FormServiceInterface {
 
         return repository.save(entity);
     }
+
+    @Override
+    public Form insert(Form entity) {
+        return repository.save(entity);
+    }
 }
