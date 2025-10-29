@@ -117,15 +117,4 @@ public class ControllerTestRequester {
         public ResultActions post(String url, String content, String jwt) throws Exception {
                 return mockMvc.perform(MockMvcRequestBuilders.post(API_PATH + url).header("Authorization", "Bearer " + jwt).contentType("application/json").content(content));
         }
-
-        /**
-         * Performs a PATCH request in an API endpoint that uses JWT authentication.
-         * @param url The endpoint
-         * @param jwt The authentication token
-         * @return The result of the request
-         * @throws Exception If the request fails
-         */
-        public ResultActions patch(String url, String jwt) throws Exception {
-            return mockMvc.perform(MockMvcRequestBuilders.patch(API_PATH + url).header("Authorization", "Bearer " + jwt));
-        }
 }

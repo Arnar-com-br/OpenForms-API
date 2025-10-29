@@ -78,7 +78,7 @@ public class FormController extends ServiceController<FormServiceInterface> {
     }
 
     @Transactional
-    @PatchMapping(path = "/me/{id}/view")
+    @GetMapping(path = "/me/{id}/view")
     public ResponseEntity<?> setFormVisualized(@PathVariable Long id, HttpServletRequest request) {
         User me = userService.getMe(request);
 
