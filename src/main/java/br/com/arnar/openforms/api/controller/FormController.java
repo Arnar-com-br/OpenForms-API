@@ -88,6 +88,10 @@ public class FormController extends ServiceController<FormServiceInterface> {
             throw new NoSuchEntryException("Unable to find a form with this id");
         }
 
+        if (form.getVisualized()) {
+            return ok(new SimplifiedForm(form));
+        }
+
         form.setVisualized(true);
         service.insert(form);
 
