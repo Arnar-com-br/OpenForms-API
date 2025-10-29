@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/form/me/**").authenticated()
                 .requestMatchers("/api/v1/user/me").authenticated()
                 .requestMatchers("/api/v1/user/me/**").authenticated()
-                .requestMatchers("**").permitAll());
+                .requestMatchers("/**").permitAll());
 
         http.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
 
