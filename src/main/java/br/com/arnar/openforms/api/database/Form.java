@@ -22,6 +22,7 @@ import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import java.util.Date;
 
 @Entity
 @Data
@@ -52,4 +53,8 @@ public class Form {
     @ColumnDefault("false")
     @Column(name = "visualized")
     private Boolean visualized;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 }

@@ -21,6 +21,8 @@ import br.com.arnar.openforms.api.database.Form;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class SimplifiedForm {
@@ -30,6 +32,7 @@ public class SimplifiedForm {
     public String email;
     public String message;
     public Boolean visualized;
+    public Date createdAt;
 
     public SimplifiedForm(Form form) {
         setId(form.getId());
@@ -38,5 +41,6 @@ public class SimplifiedForm {
         setEmail(form.getEmail());
         setMessage(form.getMessage());
         setVisualized(form.getVisualized());
+        setCreatedAt(form.getCreatedAt());
     }
 }

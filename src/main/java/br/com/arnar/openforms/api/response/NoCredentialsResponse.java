@@ -26,11 +26,13 @@ import lombok.Setter;
 public class NoCredentialsResponse {
     public Long id;
     public String username;
+    public String companyName;
     public String email;
 
     public NoCredentialsResponse(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
+        this.companyName = user.getCompanyName();
         this.email = user.getEmail();
     }
 }

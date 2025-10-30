@@ -18,23 +18,25 @@
 package br.com.arnar.openforms.api.test.request;
 
 import org.junit.jupiter.api.Test;
-
 import br.com.arnar.openforms.api.request.user.UserCreateRequest;
-import br.com.arnar.openforms.api.request.user.UserLoginRequest;
 
 import static br.com.arnar.openforms.api.request.ExceptionTemplate.*;
 
 class UserCreateRequestTest extends RequestTest {
-	@Test
-	void noException() {
+
+    @Test
+    void noException() {
         UserCreateRequest request = new UserCreateRequest();
 
-		request.setEmail("arthur@gmail.com");
+        request.setEmail("arthur@gmail.com");
         request.setUsername("Arthur");
-		request.setPassword("senha23213");
+        request.setPassword("senha23213");
+        request.setCompanyName("Arnar");
 
-		assertValidationDoesNotThrow(request);
-	}
+        assertValidationDoesNotThrow(request);
+    }
+
+    // === Username Tests ===
 
     @Test
     void usernameInvalid() {
@@ -43,6 +45,7 @@ class UserCreateRequestTest extends RequestTest {
         request.setUsername("*!@&#(&!@#*(&!@#!@");
         request.setPassword("senha23213");
         request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
 
         assertValidationThrows(request, specialChars("username"));
     }
@@ -54,6 +57,7 @@ class UserCreateRequestTest extends RequestTest {
         request.setUsername("");
         request.setPassword("senha23213");
         request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
 
         assertValidationThrows(request, emptyOrNull("username"));
     }
@@ -64,6 +68,7 @@ class UserCreateRequestTest extends RequestTest {
 
         request.setPassword("senha23213");
         request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
 
         assertValidationThrows(request, emptyOrNull("username"));
     }
@@ -75,41 +80,84 @@ class UserCreateRequestTest extends RequestTest {
         request.setUsername("arthur".repeat(120));
         request.setPassword("senha23213");
         request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
 
         assertValidationThrows(request, exceedsMaxSize("username", 128));
     }
 
-	@Test
-	void emailInvalid() {
-		UserCreateRequest request = new UserCreateRequest();
+    // === Company Name Tests ===
 
-		request.setUsername("Arthur");
-		request.setPassword("senha23213");
-		request.setEmail("arthur@cmake.com");
+    @Test
+    void companyNameEmpty() {
+        UserCreateRequest request = new UserCreateRequest();
 
-		assertValidationThrows(request, invalid("email"));
-	}
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
+        request.setCompanyName("");
 
-	@Test
-	void emailEmpty() {
-		UserCreateRequest request = new UserCreateRequest();
+        assertValidationThrows(request, emptyOrNull("companyName"));
+    }
 
-		request.setUsername("Arthur");
-		request.setPassword("senha23213");
-		request.setEmail("");
+    @Test
+    void companyNameNull() {
+        UserCreateRequest request = new UserCreateRequest();
 
-		assertValidationThrows(request, emptyOrNull("email"));
-	}
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
 
-	@Test
-	void emailNull() {
-		UserCreateRequest request = new UserCreateRequest();
+        assertValidationThrows(request, emptyOrNull("companyName"));
+    }
 
-		request.setUsername("Arthur");
-		request.setPassword("senha23213");
+    @Test
+    void companyNameExceedsSize() {
+        UserCreateRequest request = new UserCreateRequest();
 
-		assertValidationThrows(request, emptyOrNull("email"));
-	}
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setEmail("arthur@gmail.com");
+        request.setCompanyName("ArnarCompany".repeat(20));
+
+        assertValidationThrows(request, exceedsMaxSize("companyName", 128));
+    }
+
+    // === Email Tests ===
+
+    @Test
+    void emailInvalid() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setEmail("arthur@cmake.com");
+        request.setCompanyName("Arnar");
+
+        assertValidationThrows(request, invalid("email"));
+    }
+
+    @Test
+    void emailEmpty() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setEmail("");
+        request.setCompanyName("Arnar");
+
+        assertValidationThrows(request, emptyOrNull("email"));
+    }
+
+    @Test
+    void emailNull() {
+        UserCreateRequest request = new UserCreateRequest();
+
+        request.setUsername("Arthur");
+        request.setPassword("senha23213");
+        request.setCompanyName("Arnar");
+
+        assertValidationThrows(request, emptyOrNull("email"));
+    }
 
     @Test
     void emailExceedsSize() {
@@ -118,30 +166,35 @@ class UserCreateRequestTest extends RequestTest {
         request.setUsername("Arthur");
         request.setPassword("senha23213");
         request.setEmail("arthur.araujo".repeat(128) + "@gmail.com");
+        request.setCompanyName("Arnar");
 
         assertValidationThrows(request, exceedsMaxSize("email", 128));
     }
 
-	@Test
-	void passwordEmpty() {
-		UserCreateRequest request = new UserCreateRequest();
+    // === Password Tests ===
 
-		request.setUsername("Arthur");
-		request.setPassword("");
-		request.setEmail("arthur@gmail.com");
+    @Test
+    void passwordEmpty() {
+        UserCreateRequest request = new UserCreateRequest();
 
-		assertValidationThrows(request, emptyOrNull("password"));
-	}
+        request.setUsername("Arthur");
+        request.setPassword("");
+        request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
 
-	@Test
-	void passwordNull() {
-		UserCreateRequest request = new UserCreateRequest();
+        assertValidationThrows(request, emptyOrNull("password"));
+    }
 
-		request.setUsername("Arthur");
-		request.setEmail("arthur@gmail.com");
+    @Test
+    void passwordNull() {
+        UserCreateRequest request = new UserCreateRequest();
 
-		assertValidationThrows(request, emptyOrNull("password"));
-	}
+        request.setUsername("Arthur");
+        request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
+
+        assertValidationThrows(request, emptyOrNull("password"));
+    }
 
     @Test
     void passwordExceedsSize() {
@@ -150,8 +203,8 @@ class UserCreateRequestTest extends RequestTest {
         request.setUsername("Arthur");
         request.setPassword("senha23213".repeat(129));
         request.setEmail("arthur@gmail.com");
+        request.setCompanyName("Arnar");
 
         assertValidationThrows(request, exceedsMaxSize("password", 128));
     }
-
 }
