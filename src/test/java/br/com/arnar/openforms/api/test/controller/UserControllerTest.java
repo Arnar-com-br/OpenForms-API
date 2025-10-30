@@ -32,7 +32,7 @@ class UserControllerTest extends ControllerTest {
 	@Test
 	@Order(1)
 	void create() throws Exception {
-		MockUser user = new MockUser("arthur", "arthur.araujo@gmail.com", "S_enha64");
+		MockUser user = new MockUser("arthur", "Arnar", "arthur.araujo@gmail.com", "S_enha64");
 
 		req.post("/user/register", user.toJson()).andExpect(status().isCreated());
 	}
@@ -40,7 +40,7 @@ class UserControllerTest extends ControllerTest {
 	@Test
 	@Order(2)
 	void createUserExistingEmail() throws Exception {
-		MockUser user = new MockUser("aaaaaaaa", "arthur.araujo@tutanota.com", "S_enha64");
+		MockUser user = new MockUser("aaaaaaaa", "Arnar", "arthur.araujo@tutanota.com", "S_enha64");
 
 		req.post("/user/register", user.toJson()).andExpect(status().isForbidden());
 	}

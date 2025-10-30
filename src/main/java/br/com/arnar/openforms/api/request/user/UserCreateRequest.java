@@ -31,6 +31,7 @@ import static java.util.Objects.isNull;
 @Setter
 public class UserCreateRequest implements Request {
     private String username;
+    private String companyName;
     private String email;
     private String password;
 
@@ -40,6 +41,7 @@ public class UserCreateRequest implements Request {
         User newUser = new User();
 
         newUser.setUsername(username);
+        newUser.setCompanyName(companyName);
         newUser.setEmail(email);
         newUser.setPassword(password);
 
@@ -55,6 +57,13 @@ public class UserCreateRequest implements Request {
         }
         if (username.length() > 128) {
             throw exceedsMaxSize("username", 128);
+        }
+
+        if (isNull(companyName) || companyName.isEmpty()) {
+            throw emptyOrNull("companyName");
+        }
+        if (companyName.length() > 128) {
+            throw exceedsMaxSize("companyName", 128);
         }
 
         if (isNull(email) || email.isEmpty()) {

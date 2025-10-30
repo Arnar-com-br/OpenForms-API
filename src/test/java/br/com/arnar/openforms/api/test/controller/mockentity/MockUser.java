@@ -26,6 +26,7 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class MockUser extends MockEntity {
 	private String username;
+    private String companyName;
 	private String email;
 	private String password;
 
