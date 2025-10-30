@@ -23,12 +23,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class SimplifiedForm {
+public class SimplifiedForm {
     public Long id;
     public String name;
     public String phoneNumber;
     public String email;
     public String message;
+    public Boolean visualized;
 
     public SimplifiedForm(Form form) {
         setId(form.getId());
@@ -36,5 +37,6 @@ class SimplifiedForm {
         setPhoneNumber(form.getPhoneNumber());
         setEmail(form.getEmail());
         setMessage(form.getMessage());
+        setVisualized(form.getVisualized());
     }
 }

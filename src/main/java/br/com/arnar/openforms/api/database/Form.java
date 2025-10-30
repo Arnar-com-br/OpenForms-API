@@ -19,6 +19,7 @@ package br.com.arnar.openforms.api.database;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -47,4 +48,8 @@ public class Form {
 
     @Column(name = "message")
     private String message;
+
+    @ColumnDefault("false")
+    @Column(name = "visualized")
+    private Boolean visualized;
 }

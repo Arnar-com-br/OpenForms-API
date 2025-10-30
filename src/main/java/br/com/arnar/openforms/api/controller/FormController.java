@@ -20,8 +20,10 @@ package br.com.arnar.openforms.api.controller;
 import br.com.arnar.openforms.api.OpenFormsApplication;
 import br.com.arnar.openforms.api.database.Form;
 import br.com.arnar.openforms.api.database.User;
+import br.com.arnar.openforms.api.exception.NoSuchEntryException;
 import br.com.arnar.openforms.api.request.form.FormSendRequest;
 import br.com.arnar.openforms.api.response.SimpleFormsResponse;
+import br.com.arnar.openforms.api.response.SimplifiedForm;
 import br.com.arnar.openforms.api.service.FormServiceInterface;
 import br.com.arnar.openforms.api.service.UserServiceInterface;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,5 +61,40 @@ public class FormController extends ServiceController<FormServiceInterface> {
         List<Form> forms = service.getByOwner(me);
 
         return ok(new SimpleFormsResponse(forms));
+    }
+
+    @Transactional
+    @GetMapping(path = "/me/{id}", produces = "application/json")
+    public ResponseEntity<?> getByIdForMe(@PathVariable Long id, HttpServletRequest request) {
+        User me = userService.getMe(request);
+
+        Form forms = service.getById(id);
+
+        if (!forms.getOwner().getId().equals(me.getId())) {
+            throw new NoSuchEntryException("Unable to find a form with this id");
+        }
+
+        return ok(new SimplifiedForm(forms));
+    }
+
+    @Transactional
+    @GetMapping(path = "/me/{id}/view")
+    public ResponseEntity<?> setFormVisualized(@PathVariable Long id, HttpServletRequest request) {
+        User me = userService.getMe(request);
+
+        Form form = service.getById(id);
+
+        if (!form.getOwner().getId().equals(me.getId())) {
+            throw new NoSuchEntryException("Unable to find a form with this id");
+        }
+
+        if (form.getVisualized()) {
+            return ok(new SimplifiedForm(form));
+        }
+
+        form.setVisualized(true);
+        service.insert(form);
+
+        return ok(new SimplifiedForm(form));
     }
 }
