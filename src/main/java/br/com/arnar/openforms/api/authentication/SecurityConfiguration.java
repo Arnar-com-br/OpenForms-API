@@ -18,16 +18,20 @@
 package br.com.arnar.openforms.api.authentication;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -35,11 +39,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Value("${openforms.http.allowedEndpoint}")
+    private String allowedEndpoint;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http.cors(Customizer.withDefaults());
+        http.securityMatcher("/**").cors((cors) -> cors.configurationSource(apiConfigurationSource()));
 
         http.sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -61,5 +68,30 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    private CorsConfigurationSource apiConfigurationSource() {
+        CorsConfiguration cors = new CorsConfiguration();
+
+        cors.setAllowedOrigins(List.of(allowedEndpoint));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        cors.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        cors.setAllowCredentials(true);
+        cors.setMaxAge(3600L);
+
+        CorsConfiguration openFormCors = new CorsConfiguration();
+        openFormCors.addAllowedOriginPattern("*"); // Allow all origins
+        openFormCors.setAllowedMethods(List.of("POST", "OPTIONS"));
+        openFormCors.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        openFormCors.setAllowCredentials(false); // safer for public endpoints
+        openFormCors.setMaxAge(3600L);
+
+        // Register CORS config for all endpoints
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/api/v1/form/", openFormCors);
+        source.registerCorsConfiguration("/**", cors);
+
+        return source;
     }
 }
