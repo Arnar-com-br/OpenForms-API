@@ -50,7 +50,6 @@ public class Form {
     @Column(name = "message")
     private String message;
 
-    @ColumnDefault("false")
     @Column(name = "visualized")
     private Boolean visualized;
 
