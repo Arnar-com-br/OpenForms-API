@@ -89,7 +89,7 @@ public class SecurityConfiguration {
         // Register CORS config for all endpoints
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/api/v1/form/", openFormCors);
+        source.registerCorsConfiguration("/api/v1/form", openFormCors);
         source.registerCorsConfiguration("/**", cors);
 
         return source;
