@@ -27,6 +27,8 @@ import br.com.arnar.openforms.api.service.FormServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +73,8 @@ public class FormService implements FormServiceInterface {
         User addressee = addresseeOpt.get();
 
         entity.setOwner(addressee);
+        entity.setVisualized(false);
+        entity.setCreatedAt(new Date());
 
         return repository.save(entity);
     }
