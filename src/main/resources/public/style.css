@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap");
+
+html, body, * {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    font-family: "Readex Pro", sans-serif;
+    font-size: 1rem;
+    font-weight: bolder;
+    color: #fff;
+    padding: 18px 72px;
+    border: none;
+    border-radius: 10px;
+    background-color: #000;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #0f0f0f;
+}
+
+button:active {
+    background-color: #272727;
+}
+
+input {
+    padding: 12px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #00000025;
+    background-color: #fff8f2;
+    font-family: "Readex Pro", sans-serif;
+    font-size: 0.9rem;
+}
+
+input:focus {
+    outline: 1.5px solid #000;
+}
+
+input::placeholder {
+    color: #4b4b4b;
+    font-family: "Readex Pro", sans-serif;
+    font-weight: 400;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Readex Pro", sans-serif;
+}
+
+.black {
+    font-weight: 600;
+}
