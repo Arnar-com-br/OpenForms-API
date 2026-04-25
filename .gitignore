@@ -9,3 +9,5 @@
 /src/main/resources/springboot.jks
 /src/main/resources/application.properties
 /src/main/resources/static/img/
+build/*
+.gradle/*
