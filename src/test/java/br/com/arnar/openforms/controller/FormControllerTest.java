@@ -21,7 +21,9 @@ import br.com.arnar.openforms.controller.mockentity.MockForm;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.security.test.context.support.WithMockUser;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -48,5 +50,25 @@ public class FormControllerTest extends ControllerTest {
         );
 
         req.post("/form?ownerId=3022", form.toJson()).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void visualizeUnlogged() throws Exception {
+        req.get("/form/visualize/1")
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "http://localhost/login"));
+    }
+
+
+    @Test
+    @WithMockUser(username = "mock.admin@gmail.com")
+    void visualize() throws Exception {
+        req.get("/form/visualize/1").andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(username = "mock.admin@gmail.com")
+    void visualizationOfUnauthorizedUser() throws Exception {
+        req.get("/form/visualize/7").andExpect(status().isNotFound());
     }
 }

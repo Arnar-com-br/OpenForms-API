@@ -41,4 +41,8 @@ public class Response {
     public static ResponseEntity<?> created() {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    public static ResponseEntity<?> noContent() {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

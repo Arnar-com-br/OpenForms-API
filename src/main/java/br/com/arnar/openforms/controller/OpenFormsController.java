@@ -19,6 +19,7 @@ package br.com.arnar.openforms.controller;
 
 import br.com.arnar.openforms.database.Form;
 import br.com.arnar.openforms.database.User;
+import br.com.arnar.openforms.exception.NoSuchEntryException;
 import br.com.arnar.openforms.request.user.UserLoginRequest;
 import br.com.arnar.openforms.service.FormServiceInterface;
 import br.com.arnar.openforms.service.UserServiceInterface;
@@ -27,6 +28,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 

@@ -67,7 +67,8 @@ public class OpenFormsControllerTest extends ControllerTest {
     @Test
     void homeRedirectsToLogin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/home"))
-                .andExpect(status().is3xxRedirection()).andExpect(header().string("Location", "http://localhost/login"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "http://localhost/login"));
 
     }
 

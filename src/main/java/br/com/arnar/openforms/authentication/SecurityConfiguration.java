@@ -66,6 +66,7 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/home").authenticated()
+                .requestMatchers("/api/v1/form/visualize/**").authenticated()
                 .requestMatchers("/**").permitAll()
         );
 
