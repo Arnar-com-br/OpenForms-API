@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Login ー OpenForms</title>
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .background {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("/assets/bg.png");
+        }
+
+        .logo {
+            width: 250px;
+            margin-top: 32px;
+            margin-bottom: 32px;
+        }
+
+        .login-form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10px;
+            background-color: #fff8f2;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+
+        input {
+            margin-bottom: 32px;
+            margin-left: 32px;
+            margin-right: 32px;
+            width: 400px;
+            padding: 18px 18px;
+        }
+
+        button {
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 645px) {
+            .logo {
+                width: 200px;
+            }
+
+            .login-form-container {
+                width: 95%;
+            }
+
+            button {
+                width: 90%;
+            }
+
+            input {
+                width: 80%;
+                padding: 18px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="background">
+    <form class="login-form-container" action="#" method="post" th:object="${loginRequest}">
+        <img src="/assets/small_name.png" class="logo" height="auto" alt="OpenForms" />
+        <input type="email" placeholder="Email" th:field="*{email}" />
+        <input type="password" placeholder="Senha" th:field="*{password}"/>
+        <button>Login</button>
+    </form>
+
+
+</div>
+</body>
+</html>

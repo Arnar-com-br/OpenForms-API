@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Home ー OpenForms</title>
+    <link rel="icon" href="/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        header {
+            width: 100%;
+            padding: 16px 32px;
+            border-bottom: 1px solid #00000025;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 0px 128px;
+            margin-top: 32px;
+            margin-bottom: 64px;
+        }
+
+        .small-company-name {
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        h1 {
+            margin-top: 8px;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .description {
+            margin-top: 4px;
+            margin-bottom: 32px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 1000px) {
+            .content {
+                width: 92%;
+                padding: 0px 32px;
+            }
+        }
+
+        @media (max-width: 645px) {
+            .content {
+                width: 93vw;
+                padding: 0px 16px;
+            }
+        }
+
+        .table-container {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+        }
+
+        @media (max-width: 1000px) {
+            .table-container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 645px) {
+            .table-container {
+                flex-direction: column-reverse;
+            }
+
+            .table-line {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+                padding: 12px;
+                background: #f9f9f9;
+                border-radius: 10px;
+            }
+        }
+
+        .table-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .table-content:hover {
+            opacity: 0.85;
+            cursor: pointer;
+        }
+
+        .cell {
+            display: flex;
+            background-color: #d9d9d9;
+            padding: 16px 8px;
+            width: 320px;
+            border: 1.5px solid #00000025;
+        }
+
+        .content-cell {
+            background-color: #fff8f2;
+        }
+
+        /* ---------- POPUP ---------- */
+
+        .popup-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #0000008f;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-window {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 32px;
+            background-color: #fff8f2;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .popup-window p {
+            font-weight: 300;
+        }
+
+        .popup-actions {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+
+        .popup-actions button {
+            padding: 12px 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="/assets/small_name.png" width="164" alt="OpenForms"/>
+</header>
+
+<div class="content">
+    <p class="small-company-name" th:text="${companyName}"></p>
+    <h1>Mensagens para sua empresa</h1>
+    <p class="description">
+        Clique em uma mensagem para ver todas as informações.<br/>
+        Mensagens não lidas aparecem destacadas.
+    </p>
+
+    <div class="table-container">
+        <div>
+            <!-- HEADER -->
+            <div class="table-line">
+                <div class="cell"><p>Nome</p></div>
+                <div class="cell"><p>Telefone</p></div>
+                <div class="cell"><p>Email</p></div>
+                <div class="cell"><p>Mensagem</p></div>
+            </div>
+
+            <!-- DATA -->
+            <div class="table-line table-content"
+                 th:each="item : ${forms}"
+                 th:attr="
+                    data-name=${item.getName()},
+                    data-phone=${item.getPhoneNumber()},
+                    data-email=${item.getEmail()},
+                    data-message=${item.getMessage()},
+                    data-created=${item.getCreatedAt()}
+                 ">
+
+                <div class="cell content-cell">
+                    <p th:text="${item.getName()}"></p>
+                </div>
+                <div class="cell content-cell">
+                    <p th:text="${item.getPhoneNumber()}"></p>
+                </div>
+                <div class="cell content-cell">
+                    <p th:text="${item.getEmail()}"></p>
+                </div>
+                <div class="cell content-cell">
+                    <p th:text="${item.getMessage()}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup-background">
+    <div class="popup-window" onclick="event.stopPropagation()">
+        <p><b>Enviado em:</b> <span id="p-created"></span></p>
+        <p><b>Nome:</b> <span id="p-name"></span></p>
+        <p><b>Telefone:</b> <span id="p-phone"></span></p>
+        <p><b>Email:</b> <span id="p-email"></span></p>
+        <p><b>Mensagem:</b> <span id="p-message"></span></p>
+
+        <div class="popup-actions">
+            <button id="email-btn">Responder por Email</button>
+            <button id="wa-btn">Responder pelo Whatsapp</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const popup = document.getElementById("popup");
+
+    function openPopup(data) {
+        document.getElementById("p-created").textContent = data.created;
+        document.getElementById("p-name").textContent = data.name;
+        document.getElementById("p-phone").textContent = data.phone;
+        document.getElementById("p-email").textContent = data.email;
+        document.getElementById("p-message").textContent = data.message;
+
+        document.getElementById("email-btn").onclick = () =>
+            window.open(`mailto:${data.email}`);
+
+        document.getElementById("wa-btn").onclick = () =>
+            window.open(`https://wa.me/${data.phone}`);
+
+        popup.style.display = "flex";
+    }
+
+    function closePopup() {
+        popup.style.display = "none";
+    }
+
+    popup.addEventListener("click", closePopup);
+
+    document.querySelectorAll(".table-content").forEach(row => {
+        row.addEventListener("click", () => {
+            openPopup({
+                name: row.dataset.name,
+                phone: row.dataset.phone,
+                email: row.dataset.email,
+                message: row.dataset.message,
+                created: row.dataset.created
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
