@@ -41,6 +41,9 @@ public class User implements Serializable {
     @Column(name = "company_name")
     private String companyName;
 
+    @Column(name = "campaign_id", unique = true)
+    private String campaignId;
+
     @Column(name = "email", unique = true)
     private String email;
 
