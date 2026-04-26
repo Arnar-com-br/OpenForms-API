@@ -5,6 +5,10 @@ html, body, * {
     padding: 0;
 }
 
+html, body {
+    height: 100%;
+}
+
 button {
     font-family: "Readex Pro", sans-serif;
     font-size: 1rem;

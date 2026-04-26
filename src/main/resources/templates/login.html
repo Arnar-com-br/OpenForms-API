@@ -5,15 +5,17 @@
     <title>Login ー OpenForms</title>
     <link rel="icon" href="/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         .background {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background-image: url("/assets/bg.png");
+            background-repeat: repeat;
         }
 
         .logo {
@@ -71,8 +73,6 @@
         <input type="password" placeholder="Senha" th:field="*{password}"/>
         <button>Login</button>
     </form>
-
-
 </div>
 </body>
 </html>
