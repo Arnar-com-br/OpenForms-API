@@ -6,6 +6,8 @@
     <link rel="icon" href="/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <style>
         body {
             background-color: #FFF8F2;
@@ -106,8 +108,6 @@
             background-color: #fff8f2;
         }
 
-        /* ---------- POPUP ---------- */
-
         .popup-background {
             position: fixed;
             top: 0;
@@ -116,7 +116,7 @@
             width: 100%;
             height: 100%;
             z-index: 999;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
@@ -169,7 +169,6 @@
 
     <div class="table-container">
         <div>
-            <!-- HEADER -->
             <div class="table-line">
                 <div class="cell"><p>Nome</p></div>
                 <div class="cell"><p>Telefone</p></div>
@@ -177,7 +176,6 @@
                 <div class="cell"><p>Mensagem</p></div>
             </div>
 
-            <!-- DATA -->
             <div class="table-line table-content"
                  th:each="item : ${forms}"
                  th:attr="
@@ -208,7 +206,6 @@
     </div>
 </div>
 
-<!-- POPUP -->
 <div id="popup" class="popup-background">
     <div class="popup-window" onclick="event.stopPropagation()">
         <p><b>Enviado em:</b> <span id="p-created"></span></p>
@@ -225,48 +222,56 @@
 </div>
 
 <script>
-    const popup = document.getElementById("popup");
+    $(document).ready(function () {
+        const $popup = $("#popup");
+        $popup.hide()
 
-    async function openPopup(data) {
-        try {
-            await fetch(`/api/v1/form/visualize/${data.id}`, { method: "GET" });
+        async function openPopup(data) {
+            try {
+                await fetch(`/api/v1/form/visualize/${data.id}`, { method: "GET" });
+            } catch (err) {
+                console.error("Failed to visualize the form:", err);
+            }
 
-        } catch (err) {
-            console.error("Failed to visualize:", err);
+            $("#p-created").text(data.created);
+            $("#p-name").text(data.name);
+            $("#p-phone").text(data.phone);
+            $("#p-email").text(data.email);
+            $("#p-message").text(data.message);
+
+            $("#email-btn").off("click").on("click", function () {
+                window.open(`mailto://${data.email}`);
+            });
+
+            $("#wa-btn").off("click").on("click", function () {
+                window.open(`https://wa.me/${data.email}`);
+            });
+
+            $popup.fadeIn(150);
         }
 
+        function closePopup() {
+            $popup.fadeOut(150);
+        }
 
-        document.getElementById("p-created").textContent = data.created;
-        document.getElementById("p-name").textContent = data.name;
-        document.getElementById("p-phone").textContent = data.phone;
-        document.getElementById("p-email").textContent = data.email;
-        document.getElementById("p-message").textContent = data.message;
+        $popup.on("click", function () {
+            closePopup();
+        });
 
-        document.getElementById("email-btn").onclick = () =>
-            window.open(`mailto:${data.email}`);
+        $(".popup-window").on("click", function (e) {
+            e.stopPropagation();
+        });
 
-        document.getElementById("wa-btn").onclick = () =>
-            window.open(`https://wa.me/${data.phone}`);
-
-        popup.style.display = "flex";
-    }
-
-    function closePopup() {
-        popup.style.display = "none";
-    }
-
-    popup.addEventListener("click", closePopup);
-
-    document.querySelectorAll(".table-content").forEach(row => {
-        row.addEventListener("click", () => {
-            row.classList.remove("non-visualized-line")
+        $(document).on("click", ".table-content", function () {
+            const $row = $(this);
+            $row.removeClass("non-visualized-line")
             openPopup({
-                id: row.dataset.id,
-                name: row.dataset.name,
-                phone: row.dataset.phone,
-                email: row.dataset.email,
-                message: row.dataset.message,
-                created: row.dataset.created
+                id: $row.attr("data-id"),
+                name: $row.attr("data-name"),
+                phone: $row.attr("data-phone"),
+                email: $row.attr("data-email"),
+                message: $row.attr("data-message"),
+                created: $row.attr("data-created"),
             });
         });
     });
