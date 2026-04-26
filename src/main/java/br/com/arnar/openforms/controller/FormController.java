@@ -21,6 +21,7 @@ import br.com.arnar.openforms.OpenformsApplication;
 import br.com.arnar.openforms.database.Form;
 import br.com.arnar.openforms.database.User;
 import br.com.arnar.openforms.exception.NoSuchEntryException;
+import br.com.arnar.openforms.exception.RequestValidationException;
 import br.com.arnar.openforms.request.form.FormSendRequest;
 import br.com.arnar.openforms.service.FormServiceInterface;
 import br.com.arnar.openforms.service.UserServiceInterface;
@@ -44,9 +45,12 @@ public class FormController extends ServiceController<FormServiceInterface> {
 
     @PostMapping(consumes = "application/json")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<?> create(@RequestBody FormSendRequest req, @RequestParam Long ownerId) throws Exception {
+    public ResponseEntity<?> create(@RequestBody FormSendRequest req, @RequestParam String campaign) throws NoSuchEntryException, RequestValidationException {
         Form form = req.toEntity();
-        service.insert(form, ownerId);
+        User owner = userService.getByCampaignId(campaign);
+
+        service.insert(form, owner.getId());
+
         return created();
     }
 

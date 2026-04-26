@@ -18,10 +18,8 @@
 package br.com.arnar.openforms.service;
 
 import br.com.arnar.openforms.database.User;
-import br.com.arnar.openforms.exception.IncorrectCredentialsException;
 import br.com.arnar.openforms.exception.NoSuchEntryException;
 import br.com.arnar.openforms.exception.ValueTakenException;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.security.spec.InvalidKeySpecException;
 
@@ -45,22 +43,7 @@ public interface UserServiceInterface {
      */
     User getByEmail(String email) throws NoSuchEntryException;
 
-    /**
-     * Updates the current user's email and password, after verifying the current credentials.
-     * Fails if the new email is already taken or if credentials do not match.
-     *
-     * @param request  the request containing the current user's JWT.
-     * @param newEmail the new email to set.
-     * @param oldEmail the user's current email (for verification).
-     * @param password the current password (for verification).
-     * @return the updated {@link User} entity.
-     * @throws ValueTakenException           if the new email is already registered.
-     * @throws InvalidKeySpecException       if password hashing fails.
-     * @throws NoSuchEntryException          if the current user cannot be found.
-     * @throws IncorrectCredentialsException if the old credentials are incorrect.
-     */
-    @SuppressWarnings("UnusedReturnValue")
-    User insertWithNewEmail(HttpServletRequest request, String newEmail, String oldEmail, String password) throws ValueTakenException, InvalidKeySpecException, NoSuchEntryException, IncorrectCredentialsException;
+    User getByCampaignId(String campaignId) throws NoSuchEntryException;
 
     /**
      * Deletes a user from the system.

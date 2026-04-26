@@ -37,11 +37,11 @@ public class FormControllerTest extends ControllerTest {
                 "hello world"
         );
 
-        req.post("/form?ownerId=1", form.toJson()).andExpect(status().isCreated());
+        req.post("/form?campaign=cb147f1", form.toJson()).andExpect(status().isCreated());
     }
 
     @Test
-    void inexistentOwnerId() throws Exception {
+    void inexistentCampaign() throws Exception {
         MockForm form = new MockForm(
                 "Arthur",
                 "21921342391",
@@ -49,7 +49,7 @@ public class FormControllerTest extends ControllerTest {
                 "hello world"
         );
 
-        req.post("/form?ownerId=3022", form.toJson()).andExpect(status().isNotFound());
+        req.post("/form?campaign=2led7f2", form.toJson()).andExpect(status().isNotFound());
     }
 
     @Test

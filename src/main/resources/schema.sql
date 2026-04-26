@@ -6,6 +6,7 @@ CREATE TABLE member
     id           bigint GENERATED ALWAYS AS IDENTITY,
     username     varchar(128),
     company_name varchar(128),
+    campaign_id  char(7) UNIQUE,
     email        varchar(128) UNIQUE,
     password     varchar(240),
     PRIMARY KEY (id)

@@ -22,13 +22,11 @@ import br.com.arnar.openforms.exception.NoSuchEntryException;
 import br.com.arnar.openforms.exception.ValueTakenException;
 import br.com.arnar.openforms.repository.UserRepository;
 import br.com.arnar.openforms.service.UserServiceInterface;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
 @Service
@@ -66,17 +64,14 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User insertWithNewEmail(HttpServletRequest request, String newEmail, String oldEmail, String password) throws InvalidKeySpecException {
-        Optional<User> existingUserWithNewEmail = repository.findByEmail(newEmail);
+    public User getByCampaignId(String campaignId) throws NoSuchEntryException {
+        Optional<User> user = repository.findByCampaignId(campaignId);
 
-        if (existingUserWithNewEmail.isPresent()) {
-            throw new ValueTakenException("newEmail is already taken by another account.");
+        if (user.isEmpty()) {
+            throw new NoSuchEntryException("This campaign does not exist");
         }
 
-        User user = getByEmail(oldEmail);
-        user.setEmail(newEmail);
-
-        return insert(user);
+        return user.get();
     }
 
     @Override
