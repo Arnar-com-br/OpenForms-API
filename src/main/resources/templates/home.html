@@ -219,15 +219,15 @@
     <div id="form-display-area" class="form-display-area">
         <div id="form-displayer" class="form-displayer">
             <div class="form-info-container">
-                <p><b>Enviado em:</b> <span id="d-created"></span></p>
-                <p><b>Nome:</b> <span id="d-name"></span></p>
-                <p><b>Telefone:</b> <span id="d-phone"></span></p>
-                <p><b>Email:</b> <span id="d-email"></span></p>
-                <p><b>Mensagem:</b> <span id="d-message"></span></p>
+                <p><b>Enviado em:</b> <span class="p-created"></span></p>
+                <p><b>Nome:</b> <span class="p-name"></span></p>
+                <p><b>Telefone:</b> <span class="p-phone"></span></p>
+                <p><b>Email:</b> <span class="p-email"></span></p>
+                <p><b>Mensagem:</b> <span class="p-message"></span></p>
 
                 <div class="popup-actions">
-                    <button id="d-email-btn">Responder por Email</button>
-                    <button id="d-wa-btn">Responder pelo Whatsapp</button>
+                    <button class="email-btn">Responder por Email</button>
+                    <button class="wa-btn">Responder pelo Whatsapp</button>
                 </div>
             </div>
         </div>
@@ -242,15 +242,15 @@
 
 <div id="popup" class="popup-background">
     <div class="popup-window" onclick="event.stopPropagation()">
-        <p><b>Enviado em:</b> <span id="p-created"></span></p>
-        <p><b>Nome:</b> <span id="p-name"></span></p>
-        <p><b>Telefone:</b> <span id="p-phone"></span></p>
-        <p><b>Email:</b> <span id="p-email"></span></p>
-        <p><b>Mensagem:</b> <span id="p-message"></span></p>
+        <p><b>Enviado em:</b> <span class="p-created"></span></p>
+        <p><b>Nome:</b> <span class="p-name"></span></p>
+        <p><b>Telefone:</b> <span class="p-phone"></span></p>
+        <p><b>Email:</b> <span class="p-email"></span></p>
+        <p><b>Mensagem:</b> <span class="p-message"></span></p>
 
         <div class="popup-actions">
-            <button id="email-btn">Responder por Email</button>
-            <button id="wa-btn">Responder pelo Whatsapp</button>
+            <button class="email-btn">Responder por Email</button>
+            <button class="wa-btn">Responder pelo Whatsapp</button>
         </div>
     </div>
 </div>
@@ -260,59 +260,19 @@
         const $popup = $("#popup");
         $popup.hide();
 
-        async function openPopup(data) {
-            try {
-                await fetch(`/api/v1/form/visualize/${data.id}`, {method: "GET"});
-            } catch (err) {
-                console.error("Failed to visualize the form:", err);
-            }
-
-            $("#p-created").text(data.created);
-            $("#p-name").text(data.name);
-            $("#p-phone").text(data.phone);
-            $("#p-email").text(data.email);
-            $("#p-message").text(data.message);
-
-            $("#email-btn").off("click").on("click", function () {
-                window.open(`mailto://${data.email}`);
-            });
-
-            $("#wa-btn").off("click").on("click", function () {
-                window.open(`https://wa.me/${data.email}`);
-            });
-
+        async function showPopup() {
             $popup.fadeIn(150);
-        }
-
-        async function setDisplayer(data) {
-            try {
-                await fetch(`/api/v1/form/visualize/${data.id}`, {method: "GET"});
-            } catch (err) {
-                console.error("Failed to visualize the form:", err);
-            }
-
-            $("#d-created").text(data.created);
-            $("#d-name").text(data.name);
-            $("#d-phone").text(data.phone);
-            $("#d-email").text(data.email);
-            $("#d-message").text(data.message);
-
-            $("#d-email-btn").off("click").on("click", function () {
-                window.open(`mailto://${data.email}`);
-            });
-
-            $("#d-wa-btn").off("click").on("click", function () {
-                window.open(`https://wa.me/${data.email}`);
-            });
-
-            const $formDisplayArea = $("#form-display-area");
-
-            $formDisplayArea.children("#notice").hide()
-            $formDisplayArea.children("#form-displayer").fadeIn(150)
         }
 
         function closePopup() {
             $popup.fadeOut(150);
+        }
+
+         function showDisplayer() {
+            const $formDisplayArea = $("#form-display-area");
+
+            $formDisplayArea.children("#notice").hide()
+            $formDisplayArea.children("#form-displayer").fadeIn(150)
         }
 
         $popup.on("click", function () {
@@ -326,36 +286,42 @@
         $(document).on("click", ".form-entry", function () {
             const $row = $(this);
 
-            if ($(document).width() <= 864) {
-                $row.removeClass("not-viewed-entry")
-                openPopup({
-                    id: $row.attr("data-id"),
-                    name: $row.attr("data-name"),
-                    phone: $row.attr("data-phone"),
-                    email: $row.attr("data-email"),
-                    message: $row.attr("data-message"),
-                    created: $row.attr("data-created"),
-                });
-            } else {
-                $row.removeClass("not-viewed-entry")
-                setDisplayer({
-                    id: $row.attr("data-id"),
-                    name: $row.attr("data-name"),
-                    phone: $row.attr("data-phone"),
-                    email: $row.attr("data-email"),
-                    message: $row.attr("data-message"),
-                    created: $row.attr("data-created"),
-                })
+            const data = {
+                id: $row.attr("data-id"),
+                name: $row.attr("data-name"),
+                phone: $row.attr("data-phone"),
+                email: $row.attr("data-email"),
+                message: $row.attr("data-message"),
+                created: $row.attr("data-created"),
             }
+
+            $(".p-created").text(data.created);
+            $(".p-name").text(data.name);
+            $(".p-phone").text(data.phone);
+            $(".p-email").text(data.email);
+            $(".p-message").text(data.message);
+
+            $(".email-btn").off("click").on("click", function () {
+                window.open(`mailto://${data.email}`);
+            });
+
+            $(".wa-btn").off("click").on("click", function () {
+                window.open(`https://wa.me/${data.email}`);
+            });
+
+            $row.removeClass("not-viewed-entry")
+            $.get(`/api/v1/form/visualize/${data.id}`).fail(function () {
+                console.error(`Failed to visualize form with id: ${id}`);
+            });
+
+            $(document).width() <= 864 ? showPopup() : showDisplayer();
         });
 
         $(".form-entry").each(function () {
             const $row = $(this);
-            const $dataMilis = parseInt($row.attr("data-created"));
+            const dateMs = parseInt($row.attr("data-created"));
 
-            console.log($dataMilis)
-
-            const date = new Date($dataMilis);
+            const date = new Date(dateMs);
 
             const formattedDate = date.toLocaleString("pt-BR", {
                 year: "numeric",
