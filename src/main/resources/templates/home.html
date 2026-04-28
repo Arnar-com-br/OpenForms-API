@@ -167,6 +167,12 @@
             background-color: #c5cbed;
         }
 
+        .selected-entry {
+            border-color: #0f0f0f;
+            border-width: 3px;
+            border-style: solid;
+        }
+
         @media (max-width: 800px) {
             .messages-container {
                 width: 100%;
@@ -277,11 +283,18 @@
 
         $popup.on("click", function () {
             closePopup();
+            deselectForms()
         });
 
         $(".popup-window").on("click", function (e) {
             e.stopPropagation();
         });
+
+        function deselectForms() {
+            $(".selected-entry").each(function () {
+                $(this).removeClass("selected-entry");
+            })
+        }
 
         $(document).on("click", ".form-entry", function () {
             const $row = $(this);
@@ -294,6 +307,10 @@
                 message: $row.attr("data-message"),
                 created: $row.attr("data-created"),
             }
+
+            deselectForms();
+            $row.addClass("selected-entry");
+
 
             $(".p-created").text(data.created);
             $(".p-name").text(data.name);
