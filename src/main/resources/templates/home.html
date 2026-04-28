@@ -11,6 +11,7 @@
     <style>
         body {
             background-color: #FFF8F2;
+            overflow: hidden;
         }
 
         header {
@@ -19,93 +20,10 @@
             border-bottom: 1px solid #00000025;
         }
 
-        .content {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            padding: 0px 128px;
-            margin-top: 32px;
-            margin-bottom: 64px;
-        }
-
-        .small-company-name {
-            font-size: 1rem;
-            font-weight: 300;
-        }
-
         h1 {
             margin-top: 8px;
             font-size: 2rem;
             font-weight: bold;
-        }
-
-        .description {
-            margin-top: 4px;
-            margin-bottom: 32px;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 1000px) {
-            .content {
-                width: 92%;
-                padding: 0px 32px;
-            }
-        }
-
-        @media (max-width: 645px) {
-            .content {
-                width: 93vw;
-                padding: 0px 16px;
-            }
-        }
-
-        .table-container {
-            display: flex;
-            flex-direction: column;
-            width: 80%;
-        }
-
-        @media (max-width: 1000px) {
-            .table-container {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 645px) {
-            .table-container {
-                flex-direction: column-reverse;
-            }
-
-            .table-line {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 6px;
-                padding: 12px;
-                background: #f9f9f9;
-                border-radius: 10px;
-            }
-        }
-
-        .table-line {
-            display: flex;
-            align-items: center;
-        }
-
-        .table-content:hover {
-            opacity: 0.85;
-            cursor: pointer;
-        }
-
-        .cell {
-            display: flex;
-            background-color: #d9d9d9;
-            padding: 16px 8px;
-            width: 320px;
-            border: 1.5px solid #00000025;
-        }
-
-        .content-cell {
-            background-color: #fff8f2;
         }
 
         .popup-background {
@@ -136,19 +54,82 @@
             font-weight: 300;
         }
 
-        .popup-actions {
-            display: flex;
-            gap: 32px;
-            justify-content: center;
-            margin-top: 32px;
-        }
-
         .popup-actions button {
             padding: 12px 16px;
         }
 
-        .non-visualized-line > .content-cell {
-            background-color: #FFFF7E;
+        .messages-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #FFF8F2;
+            height: calc(100vh - 80px);
+            width: min-content;
+            margin-left: 64px;
+            border-left: 1px solid #00000025;
+            border-right: 1px solid #00000025;
+            overflow-y: auto;
+        }
+
+        .messages-container::after {
+            content: "";
+            height: 240px;
+            flex-shrink: 0;
+        }
+
+        .form-entry {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 72px;
+            width: 25vw;
+            background-color: #D9D9D9;
+            border-radius: 10px;
+            margin: 5px;
+            transition: opacity 100ms;
+            border: 3px solid transparent;
+            flex-shrink: 0;
+            padding: 8px;
+        }
+
+        .form-entry:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .form-entry-top {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .form-entry-bottom {
+            margin-right: 8px;
+            margin-top: 8px
+        }
+
+        .not-viewed-entry {
+            border: 3px solid #8BBDDC;
+        }
+
+        @media (max-width: 800px) {
+            .messages-container {
+                width: 100%;
+                margin-left: 0;
+                padding-left: 5px;
+            }
+
+            .form-entry {
+                margin: 5px 0;
+                width: 98%;
+            }
         }
     </style>
 </head>
@@ -159,49 +140,25 @@
     <img src="/assets/small_name.png" width="164" alt="OpenForms"/>
 </header>
 
-<div class="content">
-    <p class="small-company-name" th:text="${companyName}"></p>
-    <h1>Mensagens para sua empresa</h1>
-    <p class="description">
-        Clique em uma mensagem para ver todas as informações.<br/>
-        Mensagens não lidas aparecem destacadas.
-    </p>
-
-    <div class="table-container">
-        <div>
-            <div class="table-line">
-                <div class="cell"><p>Nome</p></div>
-                <div class="cell"><p>Telefone</p></div>
-                <div class="cell"><p>Email</p></div>
-                <div class="cell"><p>Mensagem</p></div>
-            </div>
-
-            <div class="table-line table-content"
-                 th:each="item : ${forms}"
-                 th:attr="
+<div id="messages-container" class="messages-container">
+    <div class="form-entry"
+         th:each="item : ${forms}"
+         th:attr="
                     data-id=${item.getId()},
                     data-name=${item.getName()},
                     data-phone=${item.getPhoneNumber()},
                     data-email=${item.getEmail()},
                     data-message=${item.getMessage()},
-                    data-created=${item.getCreatedAt()}
+                    data-created=${item.getCreatedAt().getTime()}
                  "
-                 th:classappend="${item.getVisualized()} ? '' : 'non-visualized-line'"
-            >
-
-                <div class="cell content-cell">
-                    <p th:text="${item.getName()}"></p>
-                </div>
-                <div class="cell content-cell">
-                    <p th:text="${item.getPhoneNumber()}"></p>
-                </div>
-                <div class="cell content-cell">
-                    <p th:text="${item.getEmail()}"></p>
-                </div>
-                <div class="cell content-cell">
-                    <p th:text="${item.getMessage()}"></p>
-                </div>
-            </div>
+         th:classappend="${item.getVisualized() ? '' : 'not-viewed-entry'}"
+    >
+        <div class="form-entry-top">
+            <p th:text="${item.getName()}" class="black ellipsis"></p>
+            <p id="created-at">01/01/1970</p>
+        </div>
+        <div class="form-entry-bottom">
+            <p th:text="${item.getMessage()}" class="ellipsis"></p>
         </div>
     </div>
 </div>
@@ -224,11 +181,11 @@
 <script>
     $(document).ready(function () {
         const $popup = $("#popup");
-        $popup.hide()
+        $popup.hide();
 
         async function openPopup(data) {
             try {
-                await fetch(`/api/v1/form/visualize/${data.id}`, { method: "GET" });
+                await fetch(`/api/v1/form/visualize/${data.id}`, {method: "GET"});
             } catch (err) {
                 console.error("Failed to visualize the form:", err);
             }
@@ -262,9 +219,9 @@
             e.stopPropagation();
         });
 
-        $(document).on("click", ".table-content", function () {
+        $(document).on("click", ".form-entry", function () {
             const $row = $(this);
-            $row.removeClass("non-visualized-line")
+            $row.removeClass("not-viewed-entry")
             openPopup({
                 id: $row.attr("data-id"),
                 name: $row.attr("data-name"),
@@ -274,6 +231,23 @@
                 created: $row.attr("data-created"),
             });
         });
+
+        $(".form-entry").each(function () {
+            const $row = $(this);
+            const $dataMilis = parseInt($row.attr("data-created"));
+
+            console.log($dataMilis)
+
+            const date = new Date($dataMilis);
+
+            const formattedDate = date.toLocaleString("pt-BR", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+            })
+
+            $($row).children(".form-entry-top").children("#created-at").text(formattedDate)
+        })
     });
 </script>
 
