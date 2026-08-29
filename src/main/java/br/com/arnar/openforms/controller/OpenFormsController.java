@@ -59,7 +59,7 @@ public class OpenFormsController {
         List<Form> forms = formService.getByOwner(user);
 
         model.addAttribute("companyName", user.getCompanyName());
-        model.addAttribute("forms", forms);
+        model.addAttribute("forms", forms.reversed());
 
         return "home";
     }
