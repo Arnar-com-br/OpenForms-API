@@ -4,8 +4,7 @@
 [Português](https://github.com/Arnar-com-br/OpenForms-API) | [English](https://github.com/Arnar-com-br/OpenForms-API/blob/master/README.en.md) | 日本語
 
 # OpenForms
-OpenFormsは二人のレポジトリに離れました： APIとUI。　このプロジェクトの理由は簡単なフォームの制御盤になれました。
-もしもArnarのお客様はWPFormsみたいなものが欲しいなら、OpenFormsは吐いている。
+OpenFormsは単純なフォームを受けるプラットホーム、WPFormsとよく似ています。
 
 # プロジェクトの規則
 このプロジェクトを助かりますなら必要なきそくです。
