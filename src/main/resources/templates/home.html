@@ -116,6 +116,22 @@
             border-radius: 10px;
         }
 
+        .form-info-title {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .form-info-name {
+            font-size: 1.8rem;
+        }
+
+        .form-info-contact {
+            margin-bottom: 24px;
+        }
+
         .notice {
             text-align: center;
         }
@@ -231,10 +247,16 @@
     <div id="form-display-area" class="form-display-area">
         <div id="form-displayer" class="form-displayer">
             <div class="form-info-container">
-                <p><b>Enviado em:</b> <span class="p-created"></span></p>
-                <p><b>Nome:</b> <span class="p-name"></span></p>
-                <p><b>Telefone:</b> <span class="p-phone"></span></p>
-                <p><b>Email:</b> <span class="p-email"></span></p>
+                <div class="form-info-title">
+                    <p class="form-info-name"><span class="p-name"></span></p>
+                    <p><b>Enviado em:</b> <span class="p-created"></span></p>
+                </div>
+
+                <div class="form-info-contact">
+                    <p><b>Telefone:</b> <span class="p-phone"></span></p>
+                    <p><b>Email:</b> <span class="p-email"></span></p>
+                </div>
+
                 <p><b>Mensagem:</b> <span class="p-message"></span></p>
 
                 <div class="popup-actions">
