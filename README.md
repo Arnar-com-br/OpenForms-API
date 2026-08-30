@@ -4,8 +4,8 @@
 Português | [English](https://github.com/Arnar-com-br/OpenForms-API/blob/master/README.en.md) | [日本語](https://github.com/Arnar-com-br/OpenForms-API/blob/master/README.jp.md)
 
 # OpenForms
-O OpenForms é divido em 2 projetos: API e UI. O intuito é ser um painel de controle simples para sites que necessitem 
-formulários. Ele é utilizado para clientes da Arnar que precisem de uma solução parecida com o WPForms.
+O OpenForms é ser um painel de controle simples para sites que necessitem receber
+formulários, uma solução similar ao WPForms
 # Padrões do projeto
 Regras que devem ser seguidas ao desenvolver o projeto
 
