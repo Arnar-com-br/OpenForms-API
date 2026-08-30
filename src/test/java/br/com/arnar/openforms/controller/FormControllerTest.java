@@ -17,17 +17,34 @@
 
 package br.com.arnar.openforms.controller;
 
+import br.com.arnar.openforms.configuration.TestMailSenderConfiguration;
 import br.com.arnar.openforms.controller.mockentity.MockForm;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import jakarta.mail.internet.MimeMessage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest(classes = { TestMailSenderConfiguration.class })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FormControllerTest extends ControllerTest {
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP);
+
+    @BeforeEach
+    void loginEmail() {
+        greenMail.setUser("test@example.com", "password");
+    }
+
     @Test
     void create() throws Exception {
         MockForm form = new MockForm(
@@ -38,6 +55,15 @@ public class FormControllerTest extends ControllerTest {
         );
 
         req.post("/form?campaign=cb147f1", form.toJson()).andExpect(status().isCreated());
+
+        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+        assertThat(receivedMessages).hasSize(1);
+
+        MimeMessage message = receivedMessages[0];
+
+        assertThat(message.getFrom()[0].toString()).isEqualTo("test@example.com");
+        assertThat(message.getAllRecipients()[0].toString()).isEqualTo("mock.admin@gmail.com");
+        assertThat(message.getSubject()).isEqualTo("Você recebeu um novo contato!");
     }
 
     @Test

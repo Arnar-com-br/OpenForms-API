@@ -23,6 +23,7 @@ import br.com.arnar.openforms.database.User;
 import br.com.arnar.openforms.exception.NoSuchEntryException;
 import br.com.arnar.openforms.repository.FormRepository;
 import br.com.arnar.openforms.repository.UserRepository;
+import br.com.arnar.openforms.service.EmailServiceInterface;
 import br.com.arnar.openforms.service.FormServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class FormService implements FormServiceInterface {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailServiceInterface emailService;
 
     @Override
     public List<Form> getByOwner(User owner) {
@@ -75,7 +79,10 @@ public class FormService implements FormServiceInterface {
         entity.setVisualized(false);
         entity.setCreatedAt(new Date());
 
-        return repository.save(entity);
+        Form savedEntity = repository.save(entity);
+        emailService.sendMessage(addressee.getEmail(), "Você recebeu um novo contato!", "Enviaram uma nova solicitação de contato para a sua empresa, para ver acesse https://forms.arnar.com.br");
+
+        return savedEntity;
     }
 
     @Override
