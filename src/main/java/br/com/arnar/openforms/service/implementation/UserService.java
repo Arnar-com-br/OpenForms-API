@@ -22,11 +22,14 @@ import br.com.arnar.openforms.exception.NoSuchEntryException;
 import br.com.arnar.openforms.exception.ValueTakenException;
 import br.com.arnar.openforms.repository.UserRepository;
 import br.com.arnar.openforms.service.UserServiceInterface;
+import br.com.arnar.openforms.util.SHA1Gen;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Service
@@ -38,6 +41,7 @@ public class UserService implements UserServiceInterface {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @SneakyThrows
     @Override
     public User register(User entity) {
         Optional<User> userWithSameEmail = repository.findByEmail(entity.getEmail());
@@ -49,6 +53,8 @@ public class UserService implements UserServiceInterface {
         String hash = passwordEncoder.encode(entity.getPassword());
 
         entity.setPassword(hash);
+        entity.setCampaignId(SHA1Gen.random().substring(0, 6));
+
         return repository.save(entity);
     }
 

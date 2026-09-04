@@ -21,6 +21,7 @@ import br.com.arnar.openforms.database.User;
 import br.com.arnar.openforms.exception.NoSuchEntryException;
 import br.com.arnar.openforms.exception.ValueTakenException;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 public interface UserServiceInterface {
@@ -32,7 +33,7 @@ public interface UserServiceInterface {
      * @throws ValueTakenException     if the email is already registered.
      * @throws InvalidKeySpecException if password hashing fails.
      */
-    User register(User entity) throws ValueTakenException, InvalidKeySpecException;
+    User register(User entity) throws ValueTakenException, InvalidKeySpecException, NoSuchAlgorithmException;
 
     /**
      * Retrieves a user entity by their email address.

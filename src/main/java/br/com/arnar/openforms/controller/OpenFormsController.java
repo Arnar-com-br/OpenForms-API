@@ -20,17 +20,19 @@ package br.com.arnar.openforms.controller;
 import br.com.arnar.openforms.database.Form;
 import br.com.arnar.openforms.database.User;
 import br.com.arnar.openforms.exception.NoSuchEntryException;
+import br.com.arnar.openforms.exception.ValueTakenException;
 import br.com.arnar.openforms.request.user.UserLoginRequest;
+import br.com.arnar.openforms.request.user.UserRegisterRequest;
 import br.com.arnar.openforms.service.FormServiceInterface;
 import br.com.arnar.openforms.service.UserServiceInterface;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @Controller
@@ -51,6 +53,25 @@ public class OpenFormsController {
         UserLoginRequest loginRequest = new UserLoginRequest();
         model.addAttribute("loginRequest", loginRequest);
         return "login";
+    }
+
+    @GetMapping("/register")
+    public String register(Model model) {
+        UserRegisterRequest registerRequest = new UserRegisterRequest();
+        model.addAttribute("registerRequest", registerRequest);
+        return "register";
+    }
+
+    @SneakyThrows
+    @PostMapping("/register")
+    public String register(@ModelAttribute UserRegisterRequest registerRequest) {
+        try {
+            User newUser = registerRequest.toEntity();
+            userService.register(newUser);
+        } catch (ValueTakenException e) {
+            return "redirect:/register?e=emailTaken";
+        }
+        return "redirect:/login";
     }
 
     @GetMapping("/home")

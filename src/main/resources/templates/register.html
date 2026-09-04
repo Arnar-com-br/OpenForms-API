@@ -2,7 +2,7 @@
 <html lang="pt-BR" xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Login ー OpenForms</title>
+    <title>Register ー OpenForms</title>
     <link rel="icon" href="/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +45,6 @@
             margin-bottom: 16px;
         }
 
-
         p {
             margin-bottom: 32px;
         }
@@ -77,12 +76,14 @@
 </head>
 <body>
 <div class="background">
-    <form class="login-form-container" action="#" method="post" th:object="${loginRequest}">
+    <form class="login-form-container" action="#" method="post" th:object="${registerRequest}">
         <img src="/assets/small_name.png" class="logo" height="auto" alt="OpenForms" />
+        <input type="text" placeholder="Usuário" th:field="*{username}" />
+        <input type="text" placeholder="Nome da Empresa" th:field="*{companyName}" />
         <input type="email" placeholder="Email" th:field="*{email}" />
         <input type="password" placeholder="Senha" th:field="*{password}"/>
-        <button>Login</button>
-        <p>Não tem uma conta? <a href="/register">Cadastrar</a></p>
+        <button>Criar conta</button>
+        <p>Já tem uma conta? <a href="/login">Entrar</a></p>
     </form>
 </div>
 </body>

@@ -45,13 +45,7 @@ public class FormService implements FormServiceInterface {
 
     @Override
     public List<Form> getByOwner(User owner) {
-        List<Form> forms = repository.findByOwnerId(owner.getId());
-
-        if (forms.isEmpty()) {
-            throw new NoSuchEntryException("There are no forms for you yet");
-        }
-
-        return forms;
+        return repository.findByOwnerId(owner.getId());
     }
 
     @Override

@@ -35,6 +35,14 @@ public class OpenFormsControllerTest extends ControllerTest {
     }
 
     @Test
+    void registerRenders() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/register"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("register"))
+                .andExpect(model().attributeExists("registerRequest"));
+    }
+
+    @Test
     void performLogin() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/login")
                 .param("email", "mock.admin@gmail.com")
@@ -42,6 +50,30 @@ public class OpenFormsControllerTest extends ControllerTest {
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/home"));
+    }
+
+    @Test
+    void registerAccount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .param("username", "Mock User")
+                        .param("companyName", "Company Name")
+                        .param("email", "mock.account.creation@gmail.com")
+                        .param("password", "S_enha64")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/login"));
+    }
+
+    @Test
+    void registerAccountExistingEmail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .param("username", "Mock User")
+                        .param("companyName", "Company Name")
+                        .param("email", "mock.admin@gmail.com")
+                        .param("password", "S_enha64")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/register?e=emailTaken"));
     }
 
     @Test
