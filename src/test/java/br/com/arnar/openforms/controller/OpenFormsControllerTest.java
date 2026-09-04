@@ -35,11 +35,27 @@ public class OpenFormsControllerTest extends ControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "mock.admin@gmail.com")
+    void loginRedirectsToHome() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/login"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/home"));
+    }
+
+    @Test
     void registerRenders() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register"))
                 .andExpect(model().attributeExists("registerRequest"));
+    }
+
+    @Test
+    @WithMockUser(username = "mock.admin@gmail.com")
+    void registerRedirectsToHome() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/register"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/home"));
     }
 
     @Test

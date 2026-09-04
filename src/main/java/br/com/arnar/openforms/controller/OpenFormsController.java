@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 public class OpenFormsController {
@@ -49,14 +50,18 @@ public class OpenFormsController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, Authentication authentication) {
+        if (authentication != null) return "redirect:/home";
+
         UserLoginRequest loginRequest = new UserLoginRequest();
         model.addAttribute("loginRequest", loginRequest);
         return "login";
     }
 
     @GetMapping("/register")
-    public String register(Model model) {
+    public String register(Model model, Authentication authentication) {
+        if (authentication != null) return "redirect:/home";
+
         UserRegisterRequest registerRequest = new UserRegisterRequest();
         model.addAttribute("registerRequest", registerRequest);
         return "register";
